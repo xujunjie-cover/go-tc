@@ -36,10 +36,12 @@ func extractTcmsgAttributes(action int, data []byte, info *Attribute) error {
 			multiError = concatError(multiError, err)
 			info.Stats = tcstats
 		case tcaStats2:
-			tcstats2 := &Stats2{}
-			err := unmarshalStruct(ad.Bytes(), tcstats2)
-			multiError = concatError(multiError, err)
-			info.Stats2 = tcstats2
+			if len(ad.Bytes()) != 0 {
+				tcstats2 := &Stats2{}
+				err := unmarshalStruct(ad.Bytes(), tcstats2)
+				multiError = concatError(multiError, err)
+				info.Stats2 = tcstats2
+			}
 		case tcaHwOffload:
 			info.HwOffload = uint8Ptr(ad.Uint8())
 		case tcaEgressBlock:
